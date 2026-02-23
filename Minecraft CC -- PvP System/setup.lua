@@ -1,16 +1,17 @@
 local function download(url, path)
-    print("Loading " .. path .. " ...")
     local response = http.get(url)
 
     if response then
         local file = fs.open(path, "w")
+
         file.write(response.readAll())
         file.close()
         response.close()
+
         return true
-    else
-        return false
     end
+
+    return false
 end
 
 local links = {
@@ -21,6 +22,7 @@ local links = {
 }
 
 for fileName, link in pairs(links) do
+    print("Loading " .. fileName .. " ...")
     local success = download(link, fileName)
 
     if success then
