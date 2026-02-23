@@ -13,7 +13,12 @@ local function download(url, path)
     end
 end
 
-download("https://raw.githubusercontent.com/USERNAME/REPO/main/main.lua", "main.lua")
-download("https://raw.githubusercontent.com/USERNAME/REPO/main/lib/util.lua", "lib/util.lua")
+write("Token: ")
+local token = read()
+
+download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/ui.lua?token="..token, "utils/ui.lua")
+download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/db.lua?token="..token, "utils/db.lua")
+download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/pvp_guis.lua?token="..token, "pvp_guis.lua")
+download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/startup.lua?token="..token, "startup.lua")
 
 print("Installation abgeschlossen!")
