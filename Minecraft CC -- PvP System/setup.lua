@@ -1,5 +1,5 @@
 local function download(url, path)
-    print("Lade " .. path .. " ...")
+    print("Loading " .. path .. " ...")
     local response = http.get(url)
 
     if response then
@@ -7,15 +7,28 @@ local function download(url, path)
         file.write(response.readAll())
         file.close()
         response.close()
-        print("Fertig!")
+        return true
     else
-        print("Fehler beim Laden von " .. url)
+        return false
     end
 end
 
-download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/ui.lua?token=GHSAT0AAAAAADWEUVWYU4BAQZKNBDK5WVJU2M4TKVA", "utils/ui.lua")
-download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/db.lua?token=GHSAT0AAAAAADWEUVWZIDEL7PI234RUK5V42M4TKMQ", "utils/db.lua")
-download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/pvp_guis.lua?token=GHSAT0AAAAAADWEUVWYR4HKAANIVUK7YKRC2M4TJHA", "pvp_guis.lua")
-download("https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/startup.lua?token=GHSAT0AAAAAADWEUVWZXRJWKOIROKX7JEJG2M4TJYA", "startup.lua")
+local links = {
+    ["utils/ui.lua"] = "https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/ui.lua",
+    ["utils/db.lua"] = "https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/utils/db.lua",
+    ["pvp_guis.lua"] = "https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/pvp_guis.lua",
+    ["startup.lua"] = "https://raw.githubusercontent.com/KosaGames/CCTweaked-Programs/refs/heads/main/Minecraft%20CC%20--%20PvP%20System/startup.lua"
+}
+
+for fileName, link in pairs(links) do
+    local success = download(link, fileName)
+
+    if success then
+        print(fileName.." was installed.")
+    else
+        print("ERROR WHILE LOADING \""..fileName.."\"")
+    end
+    
+end
 
 print("Installation abgeschlossen!")
