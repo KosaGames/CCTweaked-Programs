@@ -37,11 +37,12 @@ local function playerJoined()
         local players = db:findTable("Players")
         local player = playerLib.create(username, {})
 
-        if not(player:isInTable(players)) then
-            players:insert(player)
+        if not(player:isInTable(players.data)) then
+            players:insert(player:toDbObj())
+            players:saveChanges()
         else
-            local index = players.getIndexOfVal(username)
-            player = players[player:findInTable(players)]
+            local index = players:getIndexOfVal(username)
+            player = players[player:findInTable(players.data)]
 
             print(player.name)
         end

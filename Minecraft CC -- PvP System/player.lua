@@ -6,8 +6,8 @@ function playerLib.create(name, rewards)
     player.name = name
     player.rewards = rewards
 
-    function player:isInTable(table)
-        for _, v in pairs(table) do
+    function player:isInTable(dbTable)
+        for _, v in pairs(dbTable) do
             if(v.name == player.name) then
                 return true
             end
@@ -16,12 +16,21 @@ function playerLib.create(name, rewards)
         return false
     end
 
-    function player:findInTable(table)
-        for i, v in pairs(table) do
+    function player:findInTable(dbTable)
+        for i, v in ipairs(dbTable) do
             if(v.name == player.name) then
                 return i
             end
         end
+    end
+
+    function player:toDbObj()
+        local dbObj = {}
+
+        dbObj.name = player.name
+        dbObj.rewards = player.rewards
+
+        return dbObj
     end
 
     return player
