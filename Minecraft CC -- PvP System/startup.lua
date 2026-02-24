@@ -53,6 +53,10 @@ local function monitorTouched()
     local button = getTouchedButton(x, y)
 
     if button == nil then return end
+
+    if button == "bet" then
+        currentGui = pvp_guis.drawBet(monitor, db:findTable("Players").data)
+    end
 end
 
 currentGui = pvp_guis.drawHomeScreen(monitor)
