@@ -13,6 +13,10 @@ local function dump(o)
    end
 end
 
+ function dbLib.indexToStr(index)
+    return index..".0"
+end
+
 function dbLib.init(nbt_storage)
     local db = {}
 
@@ -28,11 +32,7 @@ function dbLib.init(nbt_storage)
 
         return false
     end
-
-    function dbLib.indexToStr(index)
-        return index..".0"
-    end
-
+    
     function db:createTable(name, data)
         local dbTable = {}
 
@@ -43,7 +43,7 @@ function dbLib.init(nbt_storage)
             return db.data[name]
         end
 
-        function dbTable:writeVal(value)
+        function dbTable:write(value)
             dbTable.data = value
         end
 
@@ -55,9 +55,9 @@ function dbLib.init(nbt_storage)
             return false
         end
 
-        function dbTable:insertVal(index, value)
+        function dbTable:insert(value)
             if(not dbTable:contains(value)) then
-                table.insert(dbTable.data, {[index] = value})
+                table.insert(dbTable.data, value)
                 return true
             end
             return false
@@ -69,7 +69,7 @@ function dbLib.init(nbt_storage)
             end
         end
 
-        function dbTable:deleteVal(value)
+        function dbTable:delete(value)
             local index = dbTable:getIndexOfVal(value)
 
             if not (index == nil) then
