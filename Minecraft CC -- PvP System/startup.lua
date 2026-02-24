@@ -33,19 +33,18 @@ end
 local function playerJoined()
     local event, username, dimension = os.pullEvent("playerJoin")
 
-    if not (db == nil) then
-        local players = db:findTable("Players")
-        local player = playerLib.create(username, {})
+    if db == nil then return end
 
-        if not(player:isInTable(players.data)) then
-            players:insert(player:toDbObj())
-            players:saveChanges()
-        else
-            local index = players:getIndexOfVal(username)
-            player = players[player:findInTable(players.data)]
+    local players = db:findTable("Players")
+    local player = playerLib.create(username, {})
 
-            print(player.name)
-        end
+    if not(player:isInTable(players)) then
+        players:insert(player:toDbObj())
+        players:saveChanges()
+    else
+        local index, player = player:findInTable(players)
+
+        print(player.name)
     end
 end
 
