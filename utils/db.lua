@@ -28,8 +28,13 @@ function db:hasTable(name)
     return false
 end
 
+function db.indexToStr(index)
+    return index..".0"
+end
+
 function db:createTable(name, data)
     local dbTable = {}
+
     dbTable.name = name
     dbTable.data = data
 
@@ -49,9 +54,9 @@ function db:createTable(name, data)
         return false
     end
 
-    function dbTable:insertVal(value)
+    function dbTable:insertVal(index, value)
         if(not dbTable:contains(value)) then
-            table.insert(dbTable.data, value)
+            table.insert(dbTable.data, {[index] = value})
             return true
         end
         return false
@@ -74,6 +79,11 @@ function db:createTable(name, data)
         return false
     end
 
+    function dbTable:get(value)
+        local index = dbTable:getIndexOfVal(value)
+        return dbTable.data[index]
+    end
+
     function dbTable:saveChanges()
         if(not db:hasTable(dbTable.name)) then
             table.insert(db.data, {[dbTable.name] = {}})
@@ -90,6 +100,8 @@ function db:findTable(name)
     for k, v in pairs(db.data) do
         if(k == name) then return db:createTable(k, v) end
     end
+
+    return db:createTable(name, {})
 end
 
 function db:printData()

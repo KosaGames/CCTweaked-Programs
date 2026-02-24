@@ -1,7 +1,10 @@
 local pvp_guis = require("pvp_guis")
+local dbLib = require("utils/db")
+local playerLib = require("player")
 
 local monitor = peripheral.find("monitor")
 local storage = peripheral.find("nbt_storage")
+local db = dbLib.init(storage)
 local chatbox = peripheral.find("chat_box")
 local detector = peripheral.find("player_detector")
 
@@ -24,25 +27,36 @@ end
 
 local function monitorResize()
     os.pullEvent("monitor_resize")
-    currentGui = pvp_guis.drawHomeScreen()
+    currentGui = pvp_guis.drawHomeScreen(monitor)
 end
 
 local function playerJoined()
     local event, username, dimension = os.pullEvent("playerJoin")
-    
+
+    if not (db == nil) then
+        local players = db:findTable("Players")
+        local player = playerLib.create(username, {})
+
+        if not(player:isInTable(players)) then
+            players:insert(player)
+        else
+            local index = players.getIndexOfVal(username)
+            player = players[player:findInTable(players)]
+
+            print(player.name)
+        end
+    end
 end
 
 local function monitorTouched()
     local event, side, x, y = os.pullEvent("monitor_touch")
     local button = getTouchedButton(x, y)
 
-    if not (button == nil) then
-        print(button.ID)
-    end
+    if button == nil then return end
 end
 
-currentGui = pvp_guis.drawHomeScreen()
+currentGui = pvp_guis.drawHomeScreen(monitor)
 
 while true do
-    local event = parallel.waitForAny(monitorResize, monitorTouched)
+    local event = parallel.waitForAny(monitorResize, monitorTouched, playerJoined)
 end
